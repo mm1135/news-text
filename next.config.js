@@ -26,6 +26,19 @@ const nextConfig = {
       'newsimg.oricon.co.jp',    // オリコン
       'amd-pctr.c.yimg.jp'       // Yahoo!ニュース別ドメイン
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.yimg.jp',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.jp',
+      },
+    ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

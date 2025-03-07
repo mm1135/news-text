@@ -1,12 +1,20 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { ButtonProps, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+
+// バリアント型を独自に定義
+type ButtonVariantProps = React.ComponentProps<"button"> & {
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
+  size?: "default" | "sm" | "lg" | "icon"
+}
 
 const Pagination = ({
   className,
   ...props
-}: React.ComponentProps<"nav">) => (
+}: React.ComponentProps<"nav"> & {
+  className?: string
+}) => (
   <nav
     role="navigation"
     aria-label="ページネーション"
@@ -16,35 +24,39 @@ const Pagination = ({
 )
 Pagination.displayName = "Pagination"
 
-const PaginationContent = React.forwardRef<
-  HTMLUListElement,
-  React.ComponentProps<"ul">
->(({ className, ...props }, ref) => (
+const PaginationContent = ({
+  className,
+  ...props
+}: React.ComponentProps<"ul"> & {
+  className?: string
+}) => (
   <ul
-    ref={ref}
     className={cn("flex flex-row items-center gap-1", className)}
     {...props}
   />
-))
+)
 PaginationContent.displayName = "PaginationContent"
 
-const PaginationItem = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentProps<"li">
->(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn("", className)} {...props} />
-))
+const PaginationItem = ({
+  className,
+  ...props
+}: React.ComponentProps<"li"> & {
+  className?: string
+}) => (
+  <li className={cn("", className)} {...props} />
+)
 PaginationItem.displayName = "PaginationItem"
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<ButtonProps, "size"> &
-  React.ComponentProps<"a">
+  size?: "default" | "sm" | "lg"
+  className?: string
+} & React.ComponentProps<"a">
 
 const PaginationLink = ({
   className,
   isActive,
-  size = "icon",
+  size = "default",
   ...props
 }: PaginationLinkProps) => (
   <a
@@ -64,10 +76,11 @@ PaginationLink.displayName = "PaginationLink"
 const PaginationPrevious = ({
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
+}: React.ComponentProps<"a"> & {
+  className?: string
+}) => (
   <PaginationLink
     aria-label="前のページへ移動"
-    size="default"
     className={cn("gap-1 pl-2.5", className)}
     {...props}
   >
@@ -80,10 +93,11 @@ PaginationPrevious.displayName = "PaginationPrevious"
 const PaginationNext = ({
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
+}: React.ComponentProps<"a"> & {
+  className?: string
+}) => (
   <PaginationLink
     aria-label="次のページへ移動"
-    size="default"
     className={cn("gap-1 pr-2.5", className)}
     {...props}
   >
@@ -96,14 +110,16 @@ PaginationNext.displayName = "PaginationNext"
 const PaginationEllipsis = ({
   className,
   ...props
-}: React.ComponentProps<"span">) => (
+}: React.ComponentProps<"span"> & {
+  className?: string
+}) => (
   <span
     aria-hidden
     className={cn("flex h-9 w-9 items-center justify-center", className)}
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">さらにページ</span>
+    <span className="sr-only">さらにページがあります</span>
   </span>
 )
 PaginationEllipsis.displayName = "PaginationEllipsis"

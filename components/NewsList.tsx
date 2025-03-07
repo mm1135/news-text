@@ -1,6 +1,5 @@
 import { UIArticle } from "@/lib/types";
 import { NewsCard } from "@/components/NewsCard";
-import { Loader2 } from "lucide-react";
 
 interface NewsListProps {
   articles: UIArticle[];

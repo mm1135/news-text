@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "日本のニュース",
-  description: "News APIを使用した日本のニュース表示サイト",
+  title: "最新ニュース",
+  description: "APIを使用した最新のニュースの表示サイト",
 };
 
 export default function RootLayout({

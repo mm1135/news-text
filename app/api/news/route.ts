@@ -11,30 +11,27 @@ export async function GET(request: NextRequest) {
     pageSize: Number(searchParams.get('pageSize')) || 10
   };
   
-  // 正しいエンドポイント
+  // 日本のニュースに特化した設定
   const url = 'https://newsdata.io/api/1/latest';
   
-  // 基本パラメータ
   const queryParams = new URLSearchParams({
-    apikey: process.env.NEWSDATA_API_KEY || ''
+    apikey: process.env.NEWSDATA_API_KEY || '',
+    country: 'jp',  // 日本のニュースソース
+    size: params.pageSize?.toString() || '10'
   });
   
-  // サイズパラメータは 'size'
-  queryParams.append('size', params.pageSize?.toString() || '10');
-  
-  // 検索キーワード
+  // 検索キーワードがある場合は日本語キーワード優先
   if (params.q) {
     queryParams.append('q', params.q);
+  } else {
+    // デフォルトで日本に関連するキーワードを追加するオプション
+    // queryParams.append('q', '日本 OR Japan');
   }
   
   // カテゴリ
   if (params.category && params.category !== 'all') {
     queryParams.append('category', params.category);
   }
-  
-  // 日本の国コードは維持し、言語コードを削除
-  queryParams.append('country', 'jp');  // 日本のニュース
-  // language パラメータは削除（サポートされていないため）
   
   // ページネーション
   const nextPage = searchParams.get('nextPage');
@@ -44,7 +41,6 @@ export async function GET(request: NextRequest) {
   
   // リクエストURL
   const apiUrl = `${url}?${queryParams.toString()}`;
-  const debugUrl = apiUrl.replace(process.env.NEWSDATA_API_KEY || '', '【API KEY】');
   
   try {
     const response = await fetch(apiUrl, {

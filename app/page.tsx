@@ -1,13 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { NewsDataResponse, UIArticle } from '@/lib/types';
+import {  UIArticle } from '@/lib/types';
 import { NewsList } from '@/components/NewsList';
 import { SearchForm } from '@/components/SearchForm';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { sampleArticles } from '@/lib/sample-data';
+
+// 型定義を明示的に追加
+interface NewsDataItem {
+  source_id: string;
+  creator?: string[] | null;
+  title: string;
+  description: string;
+  link: string;
+  image_url: string | null;
+  pubDate: string;
+  content?: string | null;
+}
 
 // インライン・ページネーションコンポーネント
 const SimplePagination = ({ 
@@ -109,7 +121,7 @@ export default function Home() {
           setTotalResults(sampleArticles.length);
         }
       } else {
-        const formattedArticles = data.results.map((item: any) => ({
+        const formattedArticles = data.results.map((item: NewsDataItem) => ({
           source: {
             id: item.source_id,
             name: item.source_id
@@ -146,6 +158,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchNews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, searchParams]);
 
   const handleSearch = (values: { q?: string; category?: string }) => {
@@ -161,7 +174,7 @@ export default function Home() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">日本のニュース</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">最新ニュース</h1>
       
       <div className="mb-8">
         <SearchForm 

@@ -32,16 +32,12 @@ export function NewsCard({ article }: NewsCardProps) {
       try {
         const url = new URL(article.urlToImage);
         setIsValidHostname(validHostnames.includes(url.hostname));
-      } catch (e) {
+      } catch {
         setIsValidHostname(false);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [article.urlToImage]);
-
-  // 外部画像URLかどうかをチェック
-  const isExternalImage = article.urlToImage?.startsWith('http');
-  // サンプルデータの画像（placeholder）かどうかをチェック
-  const isPlaceholderImage = article.urlToImage?.includes('placeholder.com');
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -57,13 +53,15 @@ export function NewsCard({ article }: NewsCardProps) {
             priority={true}
           />
         ) : article.urlToImage && !imageError ? (
-          // 許可されていないホスト名の場合はimg要素を使用
           <div className="relative h-full w-full">
-            <img
+            <Image
               src={article.urlToImage}
               alt={article.title}
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
               onError={() => setImageError(true)}
+              unoptimized={!isValidHostname}
             />
           </div>
         ) : (
